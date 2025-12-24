@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Distribution
+build/
+dist/
+*.spec
+
+# IDEs
+.vscode/
+.idea/
+
+# Project Specific
+*.log
+*.csv
