@@ -360,7 +360,7 @@ Küresel CanSat topluluğunda öne çıkan, incelemeye ve katkıya değer açık
 
 Bu proje açık kaynaklıdır ve geliştirilmeye açıktır. Hata bildirimleri ve özellik istekleri için "Issues" sekmesini kullanabilirsiniz.
 
-*   **Maintainer:** Antigravity AI Ekibi
+*   **Maintainer:** [Bahattin Yunus](https://github.com/bahattinyunus) (Baş Mimarı)
 *   **E-posta:** contact@teknofest-team.org
 *   **Web:** [www.teknofest-model-uydu-team.com](#)
 
