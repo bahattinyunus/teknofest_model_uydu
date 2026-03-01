@@ -1,7 +1,7 @@
 ﻿# 🌌 TEKNOFEST MODEL UYDU: GÖREV KONTROL MERKEZİ
 
 <div align="center">
-  <img src="assets/banner.svg" width="100%" alt="Görev Kontrol Merkezi Banner">
+  <img src="assets/banner.png" width="100%" alt="TEKNOFEST 2025 Model Uydu Banner">
 </div>
 
 <br>
