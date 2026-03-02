@@ -22,6 +22,8 @@ from ekf import ExtendedKalmanFilter
 from pid import PIDController
 from logger import logger
 from resilience import SystemHealthMonitor
+from analyzer import TelemetryAnalyzer
+from commands import SatelliteCommandProcessor
 
 
 # ── Konsol renk kodları ──────────────────────────────────────────────────────
@@ -113,6 +115,11 @@ def run_console(port: str | None = None):
         logger.info(f"Toplam paket: {packet_no}")
         logger.info(f"Maksimum irtifa: {fsm.max_altitude_m:.1f} m")
         logger.info(f"Son FSM durumu: {fsm.state.name}")
+        
+        # Görev analizi raporu oluştur
+        analyzer = TelemetryAnalyzer()
+        analyzer.generate_report()
+        
         sys.exit(0)
 
 

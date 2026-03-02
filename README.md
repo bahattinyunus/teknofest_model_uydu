@@ -55,6 +55,8 @@ teknofest_model_uydu/
 ├── src/                    # Kaynak kodlar (Ana Yazılım)
 │   ├── main.py             # Yer İstasyonu Başlatıcı
 │   ├── telemetry.py        # Veri Ayrıştırma ve Simülasyon
+│   ├── analyzer.py         # Telemetry analysis and reporting [YENİ]
+│   ├── commands.py         # NLP command processing [YENİ]
 │   ├── logger.py           # Profesyonel Log Sistemi [YENİ]
 │   ├── security.py         # Veri İrtibatı ve Güvenlik [YENİ]
 │   └── resilience.py       # Sistem Sağlık Monitörü [YENİ]
@@ -193,7 +195,9 @@ Aktif iniş sistemi kullanılması durumunda, uydunun iniş hızı **PID** kontr
 
 ## 🛡️ GÜVENLİK VE UÇUŞ ÖNCESİ KONTROLLER
 
-1.  [ ] **Mekanik:** Vidalar sıkı, çatlak yok.
+1.  - 🔍 **Mission Analysis**: Post-flight telemetry analyzer and report generator.
+  - 🗣️ **NLP Commands**: Natural language command processing with fuzzy matching.
+  - 🛡️ **Security**: CRC32 integrity checks and encrypted command support.
 2.  [ ] **Enerji:** LiPo > 12.4V.
 3.  [ ] **Link:** Telemetri RSSI > -90dBm.
 4.  [ ] **GPS:** 6+ Uydu kilidi.

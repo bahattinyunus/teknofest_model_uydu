@@ -6,6 +6,36 @@ Sürümleme: [Semantic Versioning](https://semver.org/)
 
 ---
 
+## [1.4.0] - 2026-03-02
+### Added
+- `src/analyzer.py`: Advanced telemetry analyzer using pandas for mission statistics.
+- `src/commands.py`: Natural language command processor (NLP) for ground station.
+- `tests/test_v14_features.py`: Verification suite for new advanced features.
+- Mission report generation (Markdown) integrated into `main.py` on exit.
+- Command entry field added to `ground_station.py` GUI.
+
+### Changed
+- Standardized telemetry column names for better cross-module compatibility.
+- Updated `main.py` to trigger mission analysis upon system shutdown.
+
+---
+
+## [1.3.0] – 2026-03-02
+
+### Eklendi
+- `src/logger.py` – Profesyonel renkli konsol ve döner dosya (rotating) log sistemi.
+- `src/security.py` – CRC32 hata tespiti ve XOR komut şifreleme modülü.
+- `src/resilience.py` – CPU/Bellek kullanımını izleyen sistem sağlık monitörü.
+- `logs/` – Telemetri ve sistem logları için kalıcı depolama dizini.
+- `tests/test_new_modules.py` – Yeni eklenen modüller için birim testleri.
+
+### Değiştirildi
+- `src/telemetry.py` – CSV kayıt desteği ve CRC32 paket doğrulama entegrasyonu.
+- `src/main.py` – Loglama sistemi ve periyodik sistem sağlık kontrolü (heartbeat) entegrasyonu.
+- `README.md` – Yeni mimari bileşenleri ve dosya yapısı güncellendi.
+
+---
+
 ## [1.2.0] – 2026-03-01
 
 ### Eklendi

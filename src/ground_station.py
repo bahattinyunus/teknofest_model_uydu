@@ -32,6 +32,7 @@ from matplotlib.figure import Figure
 import numpy as np
 
 from telemetry import TelemetryHandler
+from commands import SatelliteCommandProcessor
 
 # ── Sabitler ────────────────────────────────────────────────────────────────
 FSM_STATE_COLORS = {
@@ -102,6 +103,7 @@ class GroundStation(QMainWindow):
         self._csv_path: Path | None = None
         self._csv_writer = None
         self._csv_file   = None
+        self.cmd_processor = SatelliteCommandProcessor()
 
         self._build_ui()
         self._init_csv()
@@ -144,6 +146,20 @@ class GroundStation(QMainWindow):
         self.fsm_lbl.setAlignment(Qt.AlignCenter)
         self.fsm_lbl.setStyleSheet(f"background:{FSM_STATE_COLORS['IDLE']}; color:white; border-radius:6px; padding:4px;")
         root.addWidget(self.fsm_lbl)
+
+        # ── Komut Girişi [YENİ v1.4.0]
+        cmd_layout = QHBoxLayout()
+        self.cmd_input = QComboBox()
+        self.cmd_input.setEditable(True)
+        self.cmd_input.addItems(["Ayrılmayı başlat", "Sistemi kapat", "Durumu raporla"])
+        self.cmd_input.setStyleSheet("background:#21262d; color:#c9d1d9; border:1px solid #30363d; padding:3px;")
+        self.cmd_send_btn = QPushButton("🚀 GÖNDER")
+        self.cmd_send_btn.setStyleSheet("background:#1f6feb; color:white; border-radius:4px; padding:5px 14px; font-weight:bold;")
+        self.cmd_send_btn.clicked.connect(self._send_command)
+        cmd_layout.addWidget(QLabel("Komut:"))
+        cmd_layout.addWidget(self.cmd_input)
+        cmd_layout.addWidget(self.cmd_send_btn)
+        root.addLayout(cmd_layout)
 
         # ── Ana splitter
         splitter = QSplitter(Qt.Horizontal)
@@ -263,6 +279,18 @@ class GroundStation(QMainWindow):
 
     def _toggle_connection(self):
         self.status_bar.showMessage("Simülasyon modunda çalışıyor...")
+
+    def _send_command(self):
+        text = self.cmd_input.currentText()
+        cmd = self.cmd_processor.process_natural_language(text)
+        if cmd:
+            self.status_bar.showMessage(f"Komut gönderildi: {cmd}")
+            if cmd == "TRIGGER_SEPARATION":
+                # FSM tetiklemek için burada bir mekanizma (telemetri handler üzerinden vs.) olmalı
+                self.fsm_lbl.setText("  FSM: SEPARATION (MANUAL)  ")
+                self.fsm_lbl.setStyleSheet(f"background:{FSM_STATE_COLORS['SEPARATION']}; color:white; border-radius:6px; padding:4px; font-weight:bold;")
+        else:
+            self.status_bar.showMessage("Bilinmeyen komut!")
 
     def _init_csv(self):
         ts = datetime.now().strftime("%Y%m%d_%H%M%S")
