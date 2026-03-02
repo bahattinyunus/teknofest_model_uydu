@@ -54,8 +54,12 @@ teknofest_model_uydu/
 │   └── PCB_Layout/         # Altium/KiCad devre şemaları
 ├── src/                    # Kaynak kodlar (Ana Yazılım)
 │   ├── main.py             # Yer İstasyonu Başlatıcı
-│   └── telemetry.py        # Veri Ayrıştırma ve Simülasyon Modülü
-├── tests/                  # Birim testleri ve senaryo simülasyonları
+│   ├── telemetry.py        # Veri Ayrıştırma ve Simülasyon
+│   ├── logger.py           # Profesyonel Log Sistemi [YENİ]
+│   ├── security.py         # Veri İrtibatı ve Güvenlik [YENİ]
+│   └── resilience.py       # Sistem Sağlık Monitörü [YENİ]
+├── tests/                  # Birim testleri
+├── logs/                   # Otomatik oluşturulan log dosyaları
 ├── .gitignore              # Git tarafından yok sayılacak dosyalar
 ├── README.md               # Ana proje dokümantasyonu (Bu dosya)
 └── requirements.txt        # Python bağımlılık listesi
@@ -129,6 +133,11 @@ MPU6050'den alınan ivmeölçer ve jiroskop verileri ile barometrik irtifa veril
 Aktif iniş sistemi kullanılması durumunda, uydunun iniş hızı **PID** kontrolcü tarafından yönetilir.
 *   **Hedef:** 12-14 m/s sabit iniş hızı.
 *   **Çıktı:** ESC/Motor PWM sinyali.
+
+### 3. Sistem Sağlığı ve Güvenlik (Resilience & Security)
+*   **Checksum:** Tüm paketler CRC32 ile doğrulanır.
+*   **Logging:** `logs/telemetry.csv` ve `logs/satellite.log` dosyalarına gerçek zamanlı kayıt.
+*   **Monitoring:** CPU ve bellek kullanımı anlık takip edilir.
 
 ---
 

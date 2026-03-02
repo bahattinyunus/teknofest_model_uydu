@@ -20,6 +20,8 @@ from telemetry import TelemetryHandler
 from fsm import FlightStateMachine
 from ekf import ExtendedKalmanFilter
 from pid import PIDController
+from logger import logger
+from resilience import SystemHealthMonitor
 
 
 # ── Konsol renk kodları ──────────────────────────────────────────────────────
@@ -35,12 +37,10 @@ class C:
 
 
 def print_banner():
-    print(f"{C.CYAN}{C.BOLD}")
-    print("══════════════════════════════════════════════════")
-    print("   🛰  TEKNOFEST MODEL UYDU – YER İSTASYONU      ")
-    print("        SİSTEM BAŞLATILIYOR...  v1.0              ")
-    print("══════════════════════════════════════════════════")
-    print(f"{C.RESET}")
+    logger.info("══════════════════════════════════════════════════")
+    logger.info("   🛰  TEKNOFEST MODEL UYDU – YER İSTASYONU      ")
+    logger.info("        SİSTEM BAŞLATILIYOR...  v1.3              ")
+    logger.info("══════════════════════════════════════════════════")
 
 
 def run_console(port: str | None = None):
@@ -51,15 +51,17 @@ def run_console(port: str | None = None):
     fsm       = FlightStateMachine()
     ekf       = ExtendedKalmanFilter(dt=0.5)
     pid       = PIDController(setpoint=13.0)
+    health    = SystemHealthMonitor()
 
-    print(f"{C.GREEN}[✓] Telemetri Modülü    : HAZIR{C.RESET}")
-    print(f"{C.GREEN}[✓] Durum Makinesi (FSM): HAZIR{C.RESET}")
-    print(f"{C.GREEN}[✓] EKF Filtresi        : HAZIR{C.RESET}")
-    print(f"{C.GREEN}[✓] PID Kontrolcü       : HAZIR{C.RESET}")
+    logger.info("[✓] Telemetri Modülü    : HAZIR")
+    logger.info("[✓] Durum Makinesi (FSM): HAZIR")
+    logger.info("[✓] EKF Filtresi        : HAZIR")
+    logger.info("[✓] PID Kontrolcü       : HAZIR")
+    logger.info("[✓] Sağlık Monitörü    : HAZIR")
 
     mode = "SİMÜLASYON" if port is None else f"GERÇEK → {port}"
-    print(f"\n{C.YELLOW}[≫] Mod: {mode}{C.RESET}")
-    print(f"{C.GRAY}{'─' * 50}{C.RESET}")
+    logger.info(f"Mod: {mode}")
+    print(f"{C.GRAY}{'─' * 75}{C.RESET}")
     print(f"{'Paket':<7} {'İrtifa(m)':<10} {'EKF(m)':<10} {'Hız(m/s)':<10} {'Batt(V)':<8} {'FSM':<12} {'PWM(µs)'}")
     print(f"{C.GRAY}{'─' * 75}{C.RESET}")
 
@@ -69,8 +71,9 @@ def run_console(port: str | None = None):
             raw    = telemetry.read_packet_simulation()
             parsed = telemetry.parse_packet(raw)
             if "error" in parsed:
-                print(f"{C.RED}[ERR] Paket hatası: {parsed['error']}{C.RESET}")
                 continue
+
+            health.log_heartbeat()
 
             alt   = parsed["altitude"]
             speed = parsed["speed"]
@@ -106,10 +109,10 @@ def run_console(port: str | None = None):
             time.sleep(1.0)
 
     except KeyboardInterrupt:
-        print(f"\n{C.YELLOW}[!] Sistem kapatılıyor...{C.RESET}")
-        print(f"    Toplam paket: {packet_no}")
-        print(f"    Maksimum irtifa: {fsm.max_altitude_m:.1f} m")
-        print(f"    Son FSM durumu: {fsm.state.name}")
+        logger.warning("Sistem kullanıcı tarafından kapatılıyor...")
+        logger.info(f"Toplam paket: {packet_no}")
+        logger.info(f"Maksimum irtifa: {fsm.max_altitude_m:.1f} m")
+        logger.info(f"Son FSM durumu: {fsm.state.name}")
         sys.exit(0)
 
 
